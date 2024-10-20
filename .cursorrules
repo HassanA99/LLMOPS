@@ -1,0 +1,248 @@
+# Expert Prompt: Fula Text-to-Speech System Development with Adlam Support
+
+## Context & Objective
+You are tasked with developing a state-of-the-art Text-to-Speech (TTS) system for the Fula language, with native support for both Adlam script and Latin transliteration. The system should handle multiple dialects, emotional variations, and maintain high fidelity to Fula's complex phonological features.
+
+## Technical Requirements
+
+### 1. Core System Components
+
+#### 1.1 Script Processing
+- Support full Adlam Unicode range (𞤀-𞥋)
+- Handle tone marking system (𞥄-𞥇)
+- Process length markers and nasalization
+- Support bidirectional conversion between Adlam and Latin scripts
+
+#### 1.2 Phonological Features
+- Implement complete Fula phoneme inventory:
+  * Consonants (including implosives: ɓ, ɗ, ʄ)
+  * Prenasalized stops (mb, nd, ŋg)
+  * Vowel length contrasts
+  * Tonal patterns (High, Low, Rising, Falling)
+  * Nasal vowels
+
+#### 1.3 Dialectal Variations
+- Support major Fula dialects:
+  * Pulaar (Senegal/Mauritania)
+  * Pular (Guinea)
+  * Fulfulde (Nigeria/Cameroon)
+  * Handle dialect-specific phonological rules
+
+### 2. System Architecture
+
+#### 2.1 Project Structure
+```
+fula_tts/
+├── config/
+│   ├── base_config.py        # Base configuration parameters
+│   └── model_config.py       # Model-specific configurations
+├── data/
+│   ├── preprocessing/
+│   │   ├── text_processor.py     # Text normalization & processing
+│   │   ├── audio_processor.py    # Audio preprocessing
+│   │   └── feature_extractor.py  # Acoustic feature extraction
+│   └── dataset.py               # Dataset handling
+├── models/
+│   ├── base_model.py        # Abstract base model
+│   └── vits_model.py        # VITS implementation
+├── utils/
+│   ├── adlam.py            # Adlam script utilities
+│   ├── phonemes.py         # Phoneme processing
+│   └── audio.py            # Audio utilities
+└── scripts/
+    ├── train.py            # Training pipeline
+    └── inference.py        # Inference pipeline
+```
+
+### 3. Implementation Guidelines
+
+#### 3.1 Text Processing Pipeline
+```python
+def process_text(text: str, script: str = 'adlam') -> Dict[str, Any]:
+    """
+    Process input text through the following stages:
+    1. Script normalization (Adlam/Latin)
+    2. Character decomposition
+    3. Phoneme conversion
+    4. Feature extraction
+    5. Tone marking
+    """
+    # Implementation steps...
+```
+
+#### 3.2 Audio Processing Pipeline
+```python
+def process_audio(wav_path: str) -> np.ndarray:
+    """
+    Process audio through:
+    1. Loading (22.05kHz sampling rate)
+    2. Normalization
+    3. Silence trimming
+    4. Feature extraction
+    """
+    # Implementation steps...
+```
+
+#### 3.3 Model Architecture
+```python
+class FulaTTS(BaseModel):
+    """
+    Model architecture requirements:
+    1. Phoneme encoder
+    2. Dialect encoder
+    3. Emotion encoder
+    4. Duration predictor
+    5. Acoustic decoder
+    """
+    # Implementation details...
+```
+
+### 4. Data Requirements
+
+#### 4.1 Dataset Structure
+```
+dataset/
+├── metadata.csv       # Contains all text and audio mappings
+├── wavs/             # Audio files
+├── speakers.json     # Speaker information
+└── dialects.json     # Dialect information
+```
+
+#### 4.2 Metadata Format
+```csv
+id,text,normalized_text,phonemes,wav_file,speaker_id,emotion,dialect
+1,"𞤖𞤢𞤤𞤢","jaara","dʒ aː r a","wav1.wav",1,"neutral","pulaar"
+```
+
+### 5. Training Configuration
+
+```python
+@dataclass
+class TrainingConfig:
+    """
+    Training parameters:
+    - batch_size: 32
+    - learning_rate: 0.0001
+    - num_epochs: 1000
+    - warmup_steps: 4000
+    - grad_clip_thresh: 1.0
+    """
+    # Configuration details...
+```
+
+### 6. Evaluation Metrics
+
+- Mel Cepstral Distortion (MCD)
+- Character Error Rate (CER)
+- Mean Opinion Score (MOS)
+- Speaker Similarity Score
+- Emotion Transfer Accuracy
+
+### 7. Quality Assurance
+
+#### 7.1 Test Cases
+```python
+def test_adlam_processing():
+    """
+    Test cases for Adlam processing:
+    1. Character normalization
+    2. Tone marking
+    3. Length markers
+    4. Script conversion
+    """
+    # Test implementations...
+```
+
+#### 7.2 Validation Steps
+1. Phoneme accuracy verification
+2. Dialect consistency checking
+3. Emotion transfer validation
+4. Audio quality assessment
+
+### 8. Usage Examples
+
+#### 8.1 Training
+```python
+# Initialize configuration
+config = TrainingConfig(
+    batch_size=32,
+    num_epochs=1000,
+    learning_rate=0.0001
+)
+
+# Initialize model
+model = FulaTTS(config)
+
+# Train model
+train(model, config)
+```
+
+#### 8.2 Inference
+```python
+# Load model
+model = FulaTTS.load_from_checkpoint("checkpoint.pth")
+
+# Generate speech
+text = "𞤖𞤢𞤤𞤢"  # "Hello" in Adlam
+audio = model.generate(
+    text=text,
+    script='adlam',
+    dialect='pulaar',
+    emotion='happy'
+)
+```
+
+### 9. Deployment Guidelines
+
+#### 9.1 Model Optimization
+1. Quantization
+2. Pruning
+3. Distillation
+4. ONNX export
+
+#### 9.2 Performance Requirements
+- Inference time: < 100ms per sentence
+- Model size: < 500MB
+- Memory usage: < 2GB RAM
+
+### 10. Documentation Requirements
+
+#### 10.1 Code Documentation
+- Detailed docstrings
+- Type hints
+- Architecture diagrams
+- API documentation
+
+#### 10.2 User Documentation
+- Installation guide
+- Usage examples
+- Troubleshooting guide
+- Performance optimization tips
+
+## Expected Deliverables
+
+1. Complete source code following the structure above
+2. Pre-trained models for each major dialect
+3. Comprehensive documentation
+4. Test suite with > 90% coverage
+5. Deployment examples
+6. Performance benchmarks
+
+## Success Criteria
+
+1. Natural-sounding speech synthesis
+2. Accurate Adlam script processing
+3. Proper handling of tones and length
+4. Successful emotion transfer
+5. Clear dialect differentiation
+6. Real-time inference capability
+7. Documentation completeness
+
+Remember to prioritize:
+- Code modularity and reusability
+- Extensive error handling
+- Performance optimization
+- Clear documentation
+- Testing coverage
+
+This specification provides a complete framework for developing a production-ready Fula TTS system with Adlam support.
